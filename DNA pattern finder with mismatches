@@ -1,0 +1,40 @@
+import copy
+t=''
+sequence=raw_input('Enter DNA sequence file: ')
+with open(sequence) as f:
+	b=f.read()
+t +=b
+matchlist=list()
+matches=list()
+count=0
+pattern=raw_input('Enter bases to be found (in all caps!): ')
+allowed_missmatches=raw_input('Enter number of mismatches')
+am=int(allowed_missmatches)
+p=pattern
+for i in range(len(t)-len(p)+1):
+	mismatch=0
+	for j in range(len(p)):
+		match=True
+		if t[i+j] !=p[j]:
+			mismatch=mismatch+1
+			matches.append(i+j)
+			match=False
+			continue
+		if match:
+			matches.append(i+j)
+	if mismatch>am:
+		del matches[:]
+		continue
+	count=count+1
+ 	matchlist.append(copy.copy(matches))
+	del matches[:]
+#iterate in the ist of alignments, print the list and the sequence in t in the range of each list
+for things in matchlist:
+	print""
+	print things
+	print t[min(things):(max(things)+1)]
+	print""
+print'total number of reads found: ', count
+'''you have to copy the first list because they are linked and
+simply appending it into the second list and deleteing in the
+will delete also in the second list!'''
